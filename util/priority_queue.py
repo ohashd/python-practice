@@ -7,9 +7,16 @@ class PriorityQueue():
             self.item = item
             self.priority = priority
 
+        def __repr__(self):
+            return f"({self.priority}:{self.item})"
+
     def __init__(self):
         self._minheap = []
         self._item_to_index_map = {}
+    
+
+    def __repr__(self):
+        return self._minheap.__repr__()
 
     @property
     def length(self):
@@ -67,4 +74,13 @@ class PriorityQueue():
         self._sift_down(0)
         self._item_to_index_map.pop(ret.item, None)
         return ret.item
-        
+
+    def change_priority(self, item, new_priority):
+        index = self._item_to_index_map[item]
+        old_priority = self._priority_of(index)
+        self._minheap[index].priority = new_priority
+        if old_priority > new_priority:
+            self._sift_up(index)
+        else:
+            self._sift_down(index)
+            
