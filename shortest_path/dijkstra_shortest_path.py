@@ -14,6 +14,10 @@
 # with an edge of weight 1, node 1 and 2 are connected with a weight of 1,
 # and node 0 and 2 are connected with a weight of 3. The shortest path
 # is 0->1->2.
+#
+# Runtime is O(V^2).
+# Will not work when there are negative weights in the graph.
+# Can optimize with a priority queue to store the remaining_nodes_distances.
 
 from operator import itemgetter
 import sys

@@ -15,7 +15,7 @@
 # and node 0 and 2 are connected with a weight of 3. The shortest path
 # is 0->1->2.
 
-# Runtime is O(VE) or O(V^3) when E is maximally populated (to n(n-1)/2).
+# Runtime is O(2^V).
 # Will also not work if there are any cycles in the graph.
 
 import sys
