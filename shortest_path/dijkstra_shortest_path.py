@@ -19,42 +19,45 @@
 # Will not work when there are negative weights in the graph.
 # Can optimize with a priority queue to store the remaining_nodes_distances.
 
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 import sys
+import os
+sys.path.insert(0, os.path.abspath(".."))
+from util.priority_queue import PriorityQueue
 
 def dijkstra_shortest_path(adjacency_list, start_node, end_node):
     num_nodes = len(adjacency_list)
-    visited = [False for _ in range(num_nodes)]
     previous_node = [-1 for _ in range(num_nodes)]
-    distances = [sys.maxsize for _ in range(num_nodes)]
-    distances[start_node] = 0
+    rem_nodes_distances = PriorityQueue()
+    rem_nodes_distances.insert(0, priority=0)
+    for i in range(1, num_nodes):
+        rem_nodes_distances.insert(i, priority=sys.maxsize)
 
-    while not all(visited):
-        remaining_nodes_distances = \
-            [(i, distance) for i, distance in enumerate(distances) if visited[i] == False]
+    while rem_nodes_distances.length > 0 and rem_nodes_distances.min.priority != sys.maxsize:
 
-        if all(x == sys.maxsize for x in remaining_nodes_distances):
-            break
-        
-        cur_node, cur_distance = min(remaining_nodes_distances, key=itemgetter(1))
+        cur_node, cur_distance = attrgetter('item', 'priority')(rem_nodes_distances.pop_min())
+
+        if cur_node == end_node:
+            # Print solution via back tracking
+            selected = [end_node]
+            cur_node = end_node
+            while cur_node != start_node:
+                cur_node = previous_node[cur_node]
+                selected.append(cur_node)
+            selected.reverse()
+            print(selected)
+            return cur_distance
+
         for edge_end, weight in adjacency_list[cur_node].items():
+            if not rem_nodes_distances.has_item(edge_end):
+                continue
             potential_new_dist = cur_distance + weight
-            if (potential_new_dist < distances[edge_end]):
-                distances[edge_end] = potential_new_dist
+            if (potential_new_dist < rem_nodes_distances.get_priority(edge_end)):
+                rem_nodes_distances.change_priority(edge_end, potential_new_dist)
                 previous_node[edge_end] = cur_node
-        visited[cur_node]=True
 
-    # Print solution via back tracking
-    if distances[end_node] < sys.maxsize:
-        selected = [end_node]
-        cur_node = end_node
-        while cur_node != start_node:
-            cur_node = previous_node[cur_node]
-            selected.append(cur_node)
-        selected.reverse()
-        print(selected)
+    return None
 
-    return distances[end_node]
 
 
 if __name__ == "__main__":

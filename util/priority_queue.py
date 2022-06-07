@@ -8,7 +8,7 @@ class PriorityQueue():
             self.priority = priority
 
         def __repr__(self):
-            return f"({self.priority}:{self.item})"
+            return f"({self.item}:{self.priority})"
 
     def __init__(self):
         self._minheap = []
@@ -67,13 +67,22 @@ class PriorityQueue():
         self._minheap.append(priority_queue_item)
         self._item_to_index_map[item] = self.length - 1
         self._sift_up(self.length - 1)
+
+    @property
+    def min(self):
+        ret = self._minheap[0]
+        return ret
     
     def pop_min(self):
+        if self.length == 1:
+            return self._minheap.pop(0)
+
         ret = self._minheap[0]
         self._minheap[0] = self._minheap.pop(self.length -1)
-        self._sift_down(0)
         self._item_to_index_map.pop(ret.item, None)
-        return ret.item
+        self._item_to_index_map[self._minheap[0].item] = 0
+        self._sift_down(0)
+        return ret
 
     def change_priority(self, item, new_priority):
         index = self._item_to_index_map[item]
@@ -83,4 +92,9 @@ class PriorityQueue():
             self._sift_up(index)
         else:
             self._sift_down(index)
-            
+
+    def get_priority(self, item):
+        return self._minheap[self._item_to_index_map[item]].priority
+
+    def has_item(self, item):
+        return item in self._item_to_index_map
