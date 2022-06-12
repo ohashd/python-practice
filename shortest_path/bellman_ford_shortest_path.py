@@ -15,7 +15,7 @@
 # and node 0 and 2 are connected with a weight of 3. The shortest path
 # is 0->1->2.
 #
-# Runtime is O(VE) or O(V^3).
+# Runtime is O(VE) or O(V^3) when E is maximally populated.
 # Works with negative weights and can detect negative cycles.
 
 import sys
