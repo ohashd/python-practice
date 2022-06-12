@@ -8,7 +8,8 @@
 # the topological sort can be considered O(1).
 
 # With an unlimited number of characters (K), the runtime would
-# be O(N + K^2)
+# be O(N + K^2) since topsort runs in O(V+E) and E could potentially
+# be O(V^2).
 
 from operator import itemgetter
 from functools import reduce

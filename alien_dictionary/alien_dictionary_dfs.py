@@ -4,11 +4,12 @@
 # the input was not sorted i.e. ('z', 'x', 'z'), return None.
 
 # This solution uses a depth first search (DFS) to do a topological
-# sort. Runtime is x since there are a limited number of characters
+# sort. Runtime is O(N) since there are a limited number of characters
 # the topological sort can be considered O(1).
 
 # With an unlimited number of characters (K), the runtime would
-# be x
+# be O(N + K^2) since topsort runs in O(V+E) and E could potentially
+# be O(V^2).
 
 from operator import itemgetter
 from functools import reduce
